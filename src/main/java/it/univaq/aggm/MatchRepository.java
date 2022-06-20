@@ -1,4 +1,5 @@
 package it.univaq.aggm;
+import javax.jws.WebService;
 import javax.ws.rs.*;
 
 import org.codehaus.jettison.json.JSONArray;
@@ -14,6 +15,7 @@ import java.util.Collection;
 
 @Path("matches")
 @Produces("text/xml")
+@WebService(endpointInterface = "it.univaq.aggm.MatchRepositoryInterface")
 public class MatchRepository {
 	@GET
     @Path("today")
