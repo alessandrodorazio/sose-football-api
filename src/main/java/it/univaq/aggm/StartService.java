@@ -29,7 +29,7 @@ public class StartService {
 		Endpoint ep = Endpoint.create(new MatchRepository());
 		List<Handler> handlerChain = ep.getBinding().getHandlerChain();
 		ep.getBinding().setHandlerChain(handlerChain);
-		ep.publish("http://localhost:8083/bet");
+		ep.publish("http://localhost:8091/");
 		System.out.println("SOAP server ready...");
 	}
 

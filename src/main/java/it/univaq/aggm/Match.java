@@ -6,9 +6,9 @@ import javax.xml.bind.annotation.XmlRootElement;
 public class Match {
 	private Team localTeam;
 	private Team visitorTeam;
-	private String score;
 	private int localScore;
 	private int visitorScore;
+	private String coordinates;
 	
 	public void setLocalTeam(Team localTeam) {
 		this.localTeam = localTeam;
@@ -41,4 +41,14 @@ public class Match {
 	public int getVisitorScore() {
 		return this.visitorScore;
 	}
+
+	public String getCoordinates() {
+		return coordinates;
+	}
+
+	public void setCoordinates(String coordinates) {
+		this.coordinates = coordinates;
+	}
+	
+	
 }

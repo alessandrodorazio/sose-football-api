@@ -17,5 +17,5 @@ import java.util.Collection;
 @WebService
 public interface MatchRepositoryInterface {
 	@WebMethod
-    public ArrayList<Match> getCourse() throws IOException, JSONException;
+    public ArrayList<Match> getMatches() throws IOException, JSONException;
 }
