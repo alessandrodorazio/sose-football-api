@@ -15,7 +15,8 @@ import java.util.Collection;
 
 @Path("matches")
 @Produces("text/xml")
-@WebService(endpointInterface = "it.univaq.aggm.MatchRepositoryInterface")
+@WebService(endpointInterface = "it.univaq.aggm.MatchRepositoryInterface", serviceName = "RegisterOfficeWS", portName = "RegisterOfficeWSPort", 
+targetNamespace = "http://matchRepository.univaq.it")
 public class MatchRepository {	
 	@GET
     @Path("today")
