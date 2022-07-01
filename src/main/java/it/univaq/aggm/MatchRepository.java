@@ -1,7 +1,9 @@
 package it.univaq.aggm;
 import javax.jws.WebService;
 import javax.ws.rs.*;
+import javax.xml.ws.AsyncHandler;
 
+import org.apache.cxf.jaxws.ServerAsyncResponse;
 import org.codehaus.jettison.json.JSONArray;
 import org.codehaus.jettison.json.JSONException;
 import org.codehaus.jettison.json.JSONObject;
@@ -10,16 +12,67 @@ import com.squareup.okhttp.OkHttpClient;
 import com.squareup.okhttp.Request;
 import com.squareup.okhttp.Response;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Collection;
+
+import java.util.Date;
+import java.util.concurrent.Future;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.concurrent.Future;
+import javax.xml.ws.AsyncHandler;
+import org.apache.cxf.jaxws.ServerAsyncResponse;
 
 @Path("matches")
 @Produces("text/xml")
-@WebService(endpointInterface = "it.univaq.aggm.MatchRepositoryInterface", serviceName = "RegisterOfficeWS", portName = "RegisterOfficeWSPort", 
-targetNamespace = "http://matchRepository.univaq.it")
+
 public class MatchRepository {	
+	
+private static SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
+
 	@GET
-    @Path("today")
+	@Path("today")
+	public Future<?> getMatchesAsync(AsyncHandler<MatchResponse> asyncHandler){
+		
+		System.out.println(formatter.format(new Date())
+				+ " - executing Future<?> MatchAsync with AsyncHandler *asynchronously*");
+
+		final ServerAsyncResponse<MatchResponse> asyncResponse = new ServerAsyncResponse<MatchResponse>();
+
+		new Thread() {
+			public void run() {
+
+				try {
+					Thread.sleep(1000); // 1s
+				
+					MatchResponse response = new MatchResponse();
+					
+					try {
+						response.setRes(getMatches());
+					} catch (IOException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					} catch (JSONException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+
+					asyncResponse.set(response);
+					
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
+				
+				System.out.println(formatter.format(new Date()) + " - match-date");
+				asyncHandler.handleResponse(asyncResponse);
+			}
+		}.start();
+
+		return asyncResponse;
+	}
+		
+	
+	
     public ArrayList<Match> getMatches() throws IOException, JSONException {
 		ArrayList<Match> result = new ArrayList<Match>();
 		JSONArray data = getMatchesData();
