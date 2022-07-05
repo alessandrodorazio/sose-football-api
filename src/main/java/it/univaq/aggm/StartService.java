@@ -12,6 +12,7 @@ import org.apache.cxf.jaxrs.lifecycle.SingletonResourceProvider;
 public class StartService {
 
 	public static void main(String[] args) {
+		System.out.println("football");
 		startRest();
 		startSoap();
 	}
