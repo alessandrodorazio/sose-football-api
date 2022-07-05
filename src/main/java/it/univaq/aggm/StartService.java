@@ -21,7 +21,7 @@ public class StartService {
 		JAXRSServerFactoryBean factoryBean = new JAXRSServerFactoryBean();
         factoryBean.setResourceClasses(MatchRepository.class);
         factoryBean.setResourceProvider(new SingletonResourceProvider(new MatchRepository()));
-        factoryBean.setAddress("http://localhost:8081/");
+        factoryBean.setAddress("http://0.0.0.0:8081/");
         Server server = factoryBean.create();
         System.out.println("Server ready...");
 	}
