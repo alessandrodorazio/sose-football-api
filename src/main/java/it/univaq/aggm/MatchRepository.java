@@ -32,7 +32,7 @@ private static SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy HH:
 
 	@GET
 	@Path("today")
-	public Future<?> getMatchesAsync(AsyncHandler<MatchResponse> asyncHandler){
+	/*public Future<?> getMatchesAsync(AsyncHandler<MatchResponse> asyncHandler){
 		
 		System.out.println(formatter.format(new Date())
 				+ " - executing Future<?> MatchAsync with AsyncHandler *asynchronously*");
@@ -41,7 +41,7 @@ private static SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy HH:
 
 		new Thread() {
 			public void run() {
-
+				
 				try {
 					Thread.sleep(1000); // 1s
 				
@@ -67,13 +67,10 @@ private static SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy HH:
 				asyncHandler.handleResponse(asyncResponse);
 			}
 		}.start();
-
+		
 		return asyncResponse;
 	}
-		
-	
-	
-    public ArrayList<Match> getMatches() throws IOException, JSONException {
+	*/public ArrayList<Match> getMatches() throws IOException, JSONException {
 		ArrayList<Match> result = new ArrayList<Match>();
 		JSONArray data = getMatchesData();
 	    int dataLength = data.length();
@@ -96,6 +93,7 @@ private static SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy HH:
 	    	
 	    	result.add(m);
 	    }
+	    System.out.println("Got matches");
         return result;
     }
 	
@@ -113,6 +111,7 @@ private static SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy HH:
 	    JSONObject Jobject = new JSONObject(jsonData);
 	    System.out.println(Jobject.get("data"));
 	    JSONArray data = Jobject.getJSONArray("data");
+	    System.out.println(url);
 	    return data;
 	}
 	
