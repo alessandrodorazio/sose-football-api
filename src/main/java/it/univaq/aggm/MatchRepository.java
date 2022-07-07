@@ -28,69 +28,23 @@ import org.apache.cxf.jaxws.ServerAsyncResponse;
 
 public class MatchRepository {	
 	
-private static SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
-
-	@GET
-	@Path("today")
-	/*public Future<?> getMatchesAsync(AsyncHandler<MatchResponse> asyncHandler){
-		
-		System.out.println(formatter.format(new Date())
-				+ " - executing Future<?> MatchAsync with AsyncHandler *asynchronously*");
-
-		final ServerAsyncResponse<MatchResponse> asyncResponse = new ServerAsyncResponse<MatchResponse>();
-
-		new Thread() {
-			public void run() {
-				
-				try {
-					Thread.sleep(1000); // 1s
-				
-					MatchResponse response = new MatchResponse();
-					
-					try {
-						response.setRes(getMatches());
-					} catch (IOException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					} catch (JSONException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
-
-					asyncResponse.set(response);
-					
-				} catch (InterruptedException e) {
-					e.printStackTrace();
-				}
-				
-				System.out.println(formatter.format(new Date()) + " - match-date");
-				asyncHandler.handleResponse(asyncResponse);
-			}
-		}.start();
-		
-		return asyncResponse;
-	}
-	*/public ArrayList<Match> getMatches() throws IOException, JSONException {
+	private static SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
+	
+	@GET @Path("/")
+    public ArrayList<Match> getMatches() throws IOException, JSONException {
 		ArrayList<Match> result = new ArrayList<Match>();
 		JSONArray data = getMatchesData();
 	    int dataLength = data.length();
 	    for(int i=0; i<dataLength; i++) {
 	    	JSONObject fetchedMatch = data.getJSONObject(i);
 	    	
+	    	// convert XML data into match object
 	    	Team localTeam = createTeam(fetchedMatch, "local");
 	    	Team visitorTeam = createTeam(fetchedMatch, "visitor");
-	    	
-	    	Match m = new Match();
-	    	m.setLocalTeam(localTeam);
-	    	m.setVisitorTeam(visitorTeam);
-	    	
 	    	int localTeamScore = fetchedMatch.getJSONObject("scores").getInt("localteam_score");
 	    	int visitorTeamScore = fetchedMatch.getJSONObject("scores").getInt("visitorteam_score");
 	    	
-	    	m.setLocalScore(localTeamScore);
-	    	m.setVisitorScore(visitorTeamScore);
-	    	m.setCoordinates(getCoordinates(fetchedMatch));
-	    	
+	    	Match m = new Match(localTeam, localTeamScore, visitorTeam, visitorTeamScore, getCoordinates(fetchedMatch));
 	    	result.add(m);
 	    }
 	    System.out.println("Got matches");
@@ -102,29 +56,24 @@ private static SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy HH:
 		String apiToken = "EuWlXXgur6j6aoUZwll7mWFGeU3bQcudww5AcQ9pz7AnUDb4Ed96KtJdUZQa";
 		String url = "https://soccer.sportmonks.com/api/v2.0/fixtures/date/" + todayDate + "?api_token=" + apiToken + "&include=localTeam,visitorTeam";
 		OkHttpClient client = new OkHttpClient();
-		Request request = new Request.Builder() 
-				.url(url)
-				.get().build();
-
+		// Sportmonks API call
+		Request request = new Request.Builder().url(url).get().build();
 		Response response = client.newCall(request).execute();
-		String jsonData = response.body().string();
-	    JSONObject Jobject = new JSONObject(jsonData);
-	    System.out.println(Jobject.get("data"));
-	    JSONArray data = Jobject.getJSONArray("data");
-	    System.out.println(url);
+		String jsonData = response.body().string(); // get body as string
+	    JSONObject Jobject = new JSONObject(jsonData); // create JSON Object from string
+	    JSONArray data = Jobject.getJSONArray("data"); // get data array from API
 	    return data;
 	}
 	
 	private Team createTeam(JSONObject actualMatch, String type) throws JSONException {
-		Team team = new Team();
+		// type is local or visitor
     	int id = actualMatch.getInt(type + "team_id");
     	String name = actualMatch.getJSONObject(type + "Team").getJSONObject("data").getString("name");
-    	team.setId(id);
-    	team.setName(name);
-    	return team;
+    	return new Team(id, name);
 	}
 	
 	private String getCoordinates(JSONObject actualMatch) throws JSONException {
+		// get latitude and longitude where the match will take place
 		return actualMatch.getJSONObject("weather_report").getJSONObject("coordinates").getString("lat") + ',' + actualMatch.getJSONObject("weather_report").getJSONObject("coordinates").getString("lon");
 	}
 }
