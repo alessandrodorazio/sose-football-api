@@ -18,20 +18,17 @@ public class StartServiceFootballApi {
 		startSoap(soapAddress);
 	}
 	
-	public static void startRest(String address) {
+	public static void startRest(String restAddress) {
 		JAXRSServerFactoryBean factoryBean = new JAXRSServerFactoryBean();
         factoryBean.setResourceClasses(MatchRepository.class);
         factoryBean.setResourceProvider(new SingletonResourceProvider(new MatchRepository()));
-        factoryBean.setAddress(address);
+        factoryBean.setAddress(restAddress);
         Server server = factoryBean.create();
         System.out.println("Server ready...");
 	}
 	
-	public static void startSoap(String address) {
-		Endpoint ep = Endpoint.create(new MatchRepository());
-		List<Handler> handlerChain = ep.getBinding().getHandlerChain();
-		ep.getBinding().setHandlerChain(handlerChain);
-		ep.publish(address);
+	public static void startSoap(String soapAddress) {
+		Endpoint.publish(soapAddress, new MatchRepository());
 		System.out.println("SOAP server ready...");
 	}
 

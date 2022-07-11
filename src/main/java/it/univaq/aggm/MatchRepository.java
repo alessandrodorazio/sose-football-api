@@ -47,7 +47,6 @@ public class MatchRepository {
 	    	Match m = new Match(localTeam, localTeamScore, visitorTeam, visitorTeamScore, getCoordinates(fetchedMatch));
 	    	result.add(m);
 	    }
-	    System.out.println("Got matches");
         return result;
     }
 	
