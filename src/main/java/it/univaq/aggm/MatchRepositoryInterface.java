@@ -11,11 +11,9 @@ import java.util.ArrayList;
 @WebService
 public interface MatchRepositoryInterface {
 	
-
+    /*public ArrayList<Match> getMatchesAsync() throws IOException, JSONException;
+     * // return the list of matches*/ 
 	@WebMethod
 	@ResponseWrapper(localName = "matchResponse", className="it.univaq.aggm.MatchResponse")
-    public ArrayList<Match> getMatchesAsync() throws IOException, JSONException;
-
-	@WebMethod // return the list of matches 
     public ArrayList<Match> getMatches() throws IOException, JSONException;
 }

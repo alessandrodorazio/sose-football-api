@@ -25,7 +25,7 @@ import org.apache.cxf.jaxws.ServerAsyncResponse;
 
 @Path("matches")
 @Produces("text/xml")
-
+@WebService(endpointInterface = "it.univaq.aggm.MatchRepositoryInterface")
 public class MatchRepository {	
 	
 	private static SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
