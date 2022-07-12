@@ -12,8 +12,8 @@ import org.apache.cxf.jaxrs.lifecycle.SingletonResourceProvider;
 public class StartServiceFootballApi {
 
 	public static void main(String[] args) {
-		String restAddress = "http://localhost:8081/";
-		String soapAddress = "http://localhost:8091/football";
+		String restAddress = "http://0.0.0.0:8083/";
+		String soapAddress = "http://0.0.0.0:8093/football";
 		startRest(restAddress);
 		startSoap(soapAddress);
 	}
